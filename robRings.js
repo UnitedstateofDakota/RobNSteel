@@ -1,5 +1,5 @@
 function addNewItem() {
-  $('.bg-modal').attr("style","display:flex");
+  $('.bg-modal').attr("style", "display:flex");
 }
 
 function addInfo() {
@@ -58,13 +58,46 @@ function addInfo() {
   $('#file').val();
 }
 
-  //**Current working on 6/2/19 - button is not submitting info */
-  $('btn-add-new').submit(addInfo);
+$('btn-add-new').submit(addInfo);
 
-  // close modal - 6/2/19 doesn't work correctly, no  close function
-  $('.close').on('click', function () {
-    $('.bg-modal').attr("style","display:none");
+// close modal
+$('.close').on('click', function () {
+  $('.bg-modal').attr("style", "display:none");
+});
+
+//TODO: add edit button to each row, modal, edit UI
+$('.edit_btn').on('click', addNewItem);
+
+//todo: add info into table
+$.ajax({
+  method: "GET",
+  url: "http://dkw99robnrest/RobNRest/api/products",
+})
+  .done(function (msg) {
+    addSpread(msg);
+    function addSpread() {
+      for (let i = 0; i < msg.length; i++) {
+        let table = $("#main_table tbody");
+
+        let row = $("<tr>").prependTo(table);
+
+        cellSku = $("<td>").appendTo(row);
+        cellDescription = $("<td>").appendTo(row);
+        cellQty = $("<td>").appendTo(row);
+        cellCost = $("<td>").appendTo(row);
+        cellPrice = $("<td>").appendTo(row);
+        cellImage = $("<td>").appendTo(row);  
+
+        cellSku.html(msg[i].sku);
+        cellDescription.html(msg[i].description);
+        cellQty.html(parseInt(msg[i].quantity));
+        cellCost.html(msg[i].cost);
+        cellPrice.html("$" + (msg[i].price));
+        cellImage.html('<img src="' + msg[i].image + '" width="200" height="200" alt="skull ring"><button type="button" class="edit_btn">Edit</button>');
+      }
+    }
   });
 
-  //TODO: add edit button to each row, modal, edit UI
-  $('.edit_btn').on('click', addNewItem);
+
+
+
