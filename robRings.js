@@ -65,10 +65,10 @@ $('.close').on('click', function () {
   $('.bg-modal').attr("style", "display:none");
 });
 
-//TODO: add edit button to each row, modal, edit UI
+
 $('.edit_btn').on('click', addNewItem);
 
-//todo: add info into table
+
 $.ajax({
   method: "GET",
   url: "http://dkw99robnrest/RobNRest/api/products",
@@ -77,6 +77,8 @@ $.ajax({
     addSpread(msg);
     function addSpread() {
       for (let i = 0; i < msg.length; i++) {
+        
+        if(msg[i].sku != null) {
         let table = $("#main_table tbody");
 
         let row = $("<tr>").prependTo(table);
@@ -96,8 +98,22 @@ $.ajax({
         cellImage.html('<img src="' + msg[i].image + '" width="200" height="200" alt="skull ring"><button type="button" class="edit_btn">Edit</button>');
       }
     }
+  }
+ });
+
+ 
+
+  $('#btn-add-new').click(function() {
+      console.log("hey");
+      $.ajax({
+        method: "POST",
+        url: "http://dkw99robnrest/RobNRest/api/products",
+        data: { 
+          sku: $("#new_sku").val(),
+          description: $("#new_descrip").val(),
+          quantity: $("#new_qty").val(),
+          cost: $("#new_cost").val(),
+          price: $("#new_price").val()
+        }
+      })
   });
-
-
-
-
